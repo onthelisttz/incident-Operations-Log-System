@@ -1,0 +1,48 @@
+@layer base {
+  :root {
+    --color-primary-50: 238 242 255;
+    --color-primary-100: 224 231 255;
+    --color-primary-200: 199 210 254;
+    --color-primary-600: 79 70 229;
+    --color-primary-700: 67 56 202;
+
+    --color-surface: 255 255 255;
+    --color-surface-muted: 248 250 252;
+
+    --color-ink: 15 23 42;
+    --color-ink-muted: 71 85 105;
+    --color-ink-subtle: 100 116 139;
+
+    --color-line: 226 232 240;
+    --color-line-strong: 203 213 225;
+
+    --color-success-50: 236 253 245;
+    --color-success-600: 16 185 129;
+    --color-success-700: 4 120 87;
+
+    --color-status-open-bg: 254 226 226;
+    --color-status-open-text: 190 18 60;
+    --color-status-investigating-bg: 254 243 199;
+    --color-status-investigating-text: 180 83 9;
+    --color-status-resolved-bg: 219 234 254;
+    --color-status-resolved-text: 29 78 216;
+
+    --color-severity-low-bg: 243 244 246;
+    --color-severity-low-text: 31 41 55;
+    --color-severity-medium-bg: 219 234 254;
+    --color-severity-medium-text: 30 64 175;
+    --color-severity-high-bg: 255 237 213;
+    --color-severity-high-text: 154 52 18;
+    --color-severity-critical-bg: 254 226 226;
+    --color-severity-critical-text: 153 27 27;
+
+    --color-priority-low-bg: 243 244 246;
+    --color-priority-low-text: 107 114 128;
+    --color-priority-normal-bg: 219 234 254;
+    --color-priority-normal-text: 30 64 175;
+    --color-priority-high-bg: 255 237 213;
+    --color-priority-high-text: 154 52 18;
+    --color-priority-urgent-bg: 254 226 226;
+    --color-priority-urgent-text: 153 27 27;
+  }
+}

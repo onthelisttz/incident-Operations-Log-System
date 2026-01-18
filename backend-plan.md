@@ -25,7 +25,7 @@ users
 ├── avatar (varchar 255, nullable)
 ├── is_active (boolean, default: true)
 ├── is_first_login (boolean, default: true) -- NEW: Track first login
-├── default_password (varchar 255, nullable) -- NEW: Store hashed default password for email
+
 ├── last_login_at (timestamp, nullable)
 ├── email_verified_at (timestamp, nullable)
 ├── remember_token (varchar 100, nullable)
