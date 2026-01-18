@@ -34,7 +34,7 @@ class DashboardService
             'my_assigned' => 0,
         ];
 
-        $statusCounts = $this->incidentRepository->getCountByStatus();
+        $statusCounts = $this->incidentRepository->getCountByStatus($user);
         
         $stats['open_incidents'] = $statusCounts['open'] ?? 0;
         $stats['investigating_incidents'] = $statusCounts['investigating'] ?? 0;
@@ -43,7 +43,7 @@ class DashboardService
         $stats['total_incidents'] = array_sum($statusCounts);
 
         // Critical incidents count
-        $severityCounts = $this->incidentRepository->getCountBySeverity();
+        $severityCounts = $this->incidentRepository->getCountBySeverity($user);
         $stats['critical_incidents'] = $severityCounts['critical'] ?? 0;
 
         // User-specific stats
@@ -55,7 +55,13 @@ class DashboardService
 
         // Admin-only stats
         if ($user->isAdmin()) {
-            $stats['total_users'] = $this->userRepository->getActiveCount();
+            $userRoleCounts = $this->userRepository->getCountByRole();
+            $userStatusCounts = $this->userRepository->getCountByStatus();
+
+            $stats['total_users'] = $this->userRepository->getActiveCount(); // Keep for backward compatibility if needed, or update to total
+            $stats['active_users'] = $userStatusCounts['active'];
+            $stats['inactive_users'] = $userStatusCounts['inactive'];
+            $stats['user_roles'] = $userRoleCounts;
             $stats['at_risk_count'] = $this->incidentRepository->getAtRisk()->count();
         }
 
@@ -65,9 +71,9 @@ class DashboardService
     /**
      * Get severity distribution for pie chart.
      */
-    public function getSeverityBreakdown(): array
+    public function getSeverityBreakdown(User $user): array
     {
-        $counts = $this->incidentRepository->getCountBySeverity();
+        $counts = $this->incidentRepository->getCountBySeverity($user);
         
         return [
             ['name' => 'Low', 'value' => $counts['low'] ?? 0, 'color' => '#22c55e'],
@@ -80,9 +86,9 @@ class DashboardService
     /**
      * Get status distribution for charts.
      */
-    public function getStatusDistribution(): array
+    public function getStatusDistribution(User $user): array
     {
-        $counts = $this->incidentRepository->getCountByStatus();
+        $counts = $this->incidentRepository->getCountByStatus($user);
         
         return [
             ['name' => 'Open', 'value' => $counts['open'] ?? 0, 'color' => '#ef4444'],
@@ -95,9 +101,9 @@ class DashboardService
     /**
      * Get category breakdown.
      */
-    public function getCategoryBreakdown(): array
+    public function getCategoryBreakdown(User $user): array
     {
-        $counts = $this->incidentRepository->getCountByCategory();
+        $counts = $this->incidentRepository->getCountByCategory($user);
         $categories = Incident::getCategories();
 
         $result = [];
@@ -114,14 +120,25 @@ class DashboardService
     /**
      * Get incident trends (daily counts for last N days).
      */
-    public function getTrends(int $days = 30): array
+    public function getTrends(User $user, int $days = 30): array
     {
-        $trends = Incident::select(
+        $query = Incident::select(
             DB::raw('DATE(created_at) as date'),
             DB::raw('COUNT(*) as count')
         )
-        ->where('created_at', '>=', now()->subDays($days))
-        ->groupBy(DB::raw('DATE(created_at)'))
+        ->where('created_at', '>=', now()->subDays($days));
+
+        // Apply role filter
+        if ($user->role === UserRole::REPORTER) {
+            $query->where('reported_by', $user->id);
+        } elseif ($user->role === UserRole::OPERATOR) {
+            $query->where(function ($q) use ($user) {
+                $q->where('assigned_to', $user->id)
+                  ->orWhere('reported_by', $user->id);
+            });
+        }
+
+        $trends = $query->groupBy(DB::raw('DATE(created_at)'))
         ->orderBy('date')
         ->get()
         ->pluck('count', 'date')

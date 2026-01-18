@@ -73,17 +73,17 @@ interface IncidentRepositoryInterface
     /**
      * Get incident counts by status.
      */
-    public function getCountByStatus(): array;
+    public function getCountByStatus(?User $user = null): array;
 
     /**
      * Get incident counts by severity.
      */
-    public function getCountBySeverity(): array;
+    public function getCountBySeverity(?User $user = null): array;
 
     /**
      * Get incident counts by category.
      */
-    public function getCountByCategory(): array;
+    public function getCountByCategory(?User $user = null): array;
 
     /**
      * Get incidents at risk (not updated in specified hours).

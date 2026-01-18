@@ -87,6 +87,29 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * Get count of users by role.
+     */
+    public function getCountByRole(): array
+    {
+        return [
+            'admin' => User::where('role', UserRole::ADMIN->value)->count(),
+            'operator' => User::where('role', UserRole::OPERATOR->value)->count(),
+            'reporter' => User::where('role', UserRole::REPORTER->value)->count(),
+        ];
+    }
+
+    /**
+     * Get count of users by status (active/inactive).
+     */
+    public function getCountByStatus(): array
+    {
+        return [
+            'active' => User::where('is_active', true)->count(),
+            'inactive' => User::where('is_active', false)->count(),
+        ];
+    }
+
+    /**
      * Update last login timestamp.
      */
     public function updateLastLogin(User $user): void

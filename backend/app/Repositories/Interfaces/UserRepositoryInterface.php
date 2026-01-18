@@ -54,6 +54,16 @@ interface UserRepositoryInterface
     public function getActiveCount(): int;
 
     /**
+     * Get count of users by role.
+     */
+    public function getCountByRole(): array;
+
+    /**
+     * Get count of users by status (active/inactive).
+     */
+    public function getCountByStatus(): array;
+
+    /**
      * Update last login timestamp.
      */
     public function updateLastLogin(User $user): void;

@@ -76,9 +76,9 @@ class DashboardController extends Controller
      *
      * Get incident counts by severity for charts.
      */
-    public function severityBreakdown(): JsonResponse
+    public function severityBreakdown(Request $request): JsonResponse
     {
-        $breakdown = $this->dashboardService->getSeverityBreakdown();
+        $breakdown = $this->dashboardService->getSeverityBreakdown($request->user());
 
         return response()->json([
             'success' => true,
@@ -91,9 +91,9 @@ class DashboardController extends Controller
      *
      * Get incident counts by status for charts.
      */
-    public function statusDistribution(): JsonResponse
+    public function statusDistribution(Request $request): JsonResponse
     {
-        $distribution = $this->dashboardService->getStatusDistribution();
+        $distribution = $this->dashboardService->getStatusDistribution($request->user());
 
         return response()->json([
             'success' => true,
@@ -106,9 +106,9 @@ class DashboardController extends Controller
      *
      * Get incident counts by category.
      */
-    public function categoryBreakdown(): JsonResponse
+    public function categoryBreakdown(Request $request): JsonResponse
     {
-        $breakdown = $this->dashboardService->getCategoryBreakdown();
+        $breakdown = $this->dashboardService->getCategoryBreakdown($request->user());
 
         return response()->json([
             'success' => true,
@@ -126,7 +126,7 @@ class DashboardController extends Controller
     public function trends(Request $request): JsonResponse
     {
         $days = $request->input('days', 30);
-        $trends = $this->dashboardService->getTrends($days);
+        $trends = $this->dashboardService->getTrends($request->user(), $days);
 
         return response()->json([
             'success' => true,

@@ -57,9 +57,8 @@ const StatusFlow = ({ current }: { current: string }) => {
       {statusSteps.map((step, index) => (
         <div key={step} className="flex items-center gap-2">
           <span
-            className={`rounded-full px-3 py-1 font-semibold capitalize ${
-              index <= currentIndex ? 'bg-primary-100 text-primary-700' : 'bg-surface-muted text-ink-muted'
-            }`}
+            className={`rounded-full px-3 py-1 font-semibold capitalize ${index <= currentIndex ? 'bg-primary-100 text-primary-700' : 'bg-surface-muted text-ink-muted'
+              }`}
           >
             {step}
           </span>
@@ -115,6 +114,7 @@ const IncidentDetailPage = () => {
     }[]
   >([])
   const [isLoadingUpdates, setIsLoadingUpdates] = useState(false)
+  const [error, setError] = useState('')
   const { user } = useAuth()
 
   const loadIncident = async (force = false) => {
@@ -122,13 +122,26 @@ const IncidentDetailPage = () => {
     if (incidentRequestRef.current && !force) return
     incidentRequestRef.current = true
     setIsLoading(true)
-    const response = await incidentsApi.getIncident(id)
-    setIncident(response.data.data)
-    const nextStatuses = getNextStatuses(response.data.data.status.value)
-    setStatus(nextStatuses[0]?.value ?? '')
-    setOperatorValue(response.data.data.assigned_to?.id ? String(response.data.data.assigned_to.id) : '')
-    setIsLoading(false)
-    incidentRequestRef.current = false
+    setError('')
+    try {
+      const response = await incidentsApi.getIncident(id)
+      setIncident(response.data.data)
+      const nextStatuses = getNextStatuses(response.data.data.status.value)
+      setStatus(nextStatuses[0]?.value ?? '')
+      setOperatorValue(response.data.data.assigned_to?.id ? String(response.data.data.assigned_to.id) : '')
+    } catch (err: any) {
+      if (err.response?.status === 403) {
+        setError('You do not have permission to view this incident.')
+      } else if (err.response?.status === 404) {
+        setError('Incident not found.')
+      } else {
+        setError('Unable to load incident details.')
+        toast.error('Unable to load incident details.')
+      }
+    } finally {
+      setIsLoading(false)
+      incidentRequestRef.current = false
+    }
   }
 
   useEffect(() => {
@@ -300,11 +313,12 @@ const IncidentDetailPage = () => {
       const blob = new Blob([response.data])
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
-      link.href = url
-      link.download = name ?? `attachment-${attachmentId}`
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
+      const anchor = link
+      anchor.href = url
+      anchor.download = name ?? `attachment-${attachmentId}`
+      document.body.appendChild(anchor)
+      anchor.click()
+      anchor.remove()
       window.URL.revokeObjectURL(url)
     } catch {
       toast.error('Unable to download attachment.')
@@ -313,6 +327,17 @@ const IncidentDetailPage = () => {
 
   if (isLoading) {
     return <LoadingState label="Loading incident details..." />
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <Link className="text-sm font-semibold text-primary-600 hover:text-primary-700" to="/app/incidents">
+          ← Back to Incidents
+        </Link>
+        <EmptyState title="Access Denied" description={error} />
+      </div>
+    )
   }
 
   if (!incident) {

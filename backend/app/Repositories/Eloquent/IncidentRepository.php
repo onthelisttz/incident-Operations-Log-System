@@ -176,10 +176,15 @@ class IncidentRepository implements IncidentRepositoryInterface
     /**
      * Get incident counts by status.
      */
-    public function getCountByStatus(): array
+    public function getCountByStatus(?User $user = null): array
     {
-        return Incident::select('status', DB::raw('count(*) as count'))
-            ->groupBy('status')
+        $query = Incident::select('status', DB::raw('count(*) as count'));
+        
+        if ($user) {
+            $this->applyUserFilter($query, $user);
+        }
+
+        return $query->groupBy('status')
             ->pluck('count', 'status')
             ->toArray();
     }
@@ -187,10 +192,15 @@ class IncidentRepository implements IncidentRepositoryInterface
     /**
      * Get incident counts by severity.
      */
-    public function getCountBySeverity(): array
+    public function getCountBySeverity(?User $user = null): array
     {
-        return Incident::select('severity', DB::raw('count(*) as count'))
-            ->groupBy('severity')
+        $query = Incident::select('severity', DB::raw('count(*) as count'));
+
+        if ($user) {
+            $this->applyUserFilter($query, $user);
+        }
+
+        return $query->groupBy('severity')
             ->pluck('count', 'severity')
             ->toArray();
     }
@@ -198,12 +208,32 @@ class IncidentRepository implements IncidentRepositoryInterface
     /**
      * Get incident counts by category.
      */
-    public function getCountByCategory(): array
+    public function getCountByCategory(?User $user = null): array
     {
-        return Incident::select('category', DB::raw('count(*) as count'))
-            ->groupBy('category')
+        $query = Incident::select('category', DB::raw('count(*) as count'));
+
+        if ($user) {
+            $this->applyUserFilter($query, $user);
+        }
+
+        return $query->groupBy('category')
             ->pluck('count', 'category')
             ->toArray();
+    }
+
+    /**
+     * Apply user role-based filtering to the query.
+     */
+    protected function applyUserFilter($query, User $user): void
+    {
+        if ($user->role === UserRole::REPORTER) {
+            $query->where('reported_by', $user->id);
+        } elseif ($user->role === UserRole::OPERATOR) {
+            $query->where(function ($q) use ($user) {
+                $q->where('assigned_to', $user->id)
+                  ->orWhere('reported_by', $user->id);
+            });
+        }
     }
 
     /**
