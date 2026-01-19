@@ -23,11 +23,11 @@ class StoreIncidentRequest extends FormRequest
             'description' => ['required', 'string'],
             'severity' => ['sometimes', 'string', Rule::in(IncidentSeverity::values())],
             'priority' => ['sometimes', 'string', Rule::in(IncidentPriority::values())],
-            'category' => ['sometimes', 'string', Rule::in(array_keys(Incident::getCategories()))],
+            'category' => ['sometimes', 'string'],
             'impact_description' => ['nullable', 'string'],
             'affected_systems' => ['nullable', 'array'],
             'affected_systems.*' => ['string'],
-            'due_date' => ['nullable', 'date', 'after:today'],
+            'due_date' => ['nullable', 'date', 'after_or_equal:today'],
         ];
     }
 }

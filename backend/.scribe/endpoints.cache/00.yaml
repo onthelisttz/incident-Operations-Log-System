@@ -36,11 +36,12 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"data":{"name":"IOLS","description":"Incident & Operations Log System","version":"1.0.0","features":["Incident Management","Real-time Notifications","Role-based Access Control","Analytics Dashboard","CSV Export","Activity Audit Trail"],"support_email":"msigwamb@gmail.com"}}'
+        content: '{"success":true,"data":{"name":"Incident & Operations Log System","description":"Incident & Operations Log System","version":"1.0.0","features":["Incident Management","Role-based Access Control","Analytics Dashboard","CSV Export","Activity Audit Trail"],"support_email":"noreply@iols.co.tz"}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          access-control-allow-origin: 'http://localhost:5173'
+          access-control-allow-credentials: 'true'
         description: null
     responseFields: []
     auth: []
@@ -78,11 +79,12 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"message":"API is operational.","timestamp":"2026-01-18T13:13:43+00:00"}'
+        content: '{"success":true,"message":"API is operational.","timestamp":"2026-01-18T23:49:40+00:00"}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          access-control-allow-origin: 'http://localhost:5173'
+          access-control-allow-credentials: 'true'
         description: null
     responseFields: []
     auth: []

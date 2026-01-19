@@ -124,12 +124,11 @@ class UserManagementTest extends TestCase
         $response->assertOk()
             ->assertJson([
                 'success' => true,
-                'message' => 'User deactivated successfully.',
+                'message' => 'User deleted successfully.',
             ]);
 
-        $this->assertDatabaseHas('users', [
+        $this->assertDatabaseMissing('users', [
             'id' => $user->id,
-            'is_active' => false,
         ]);
     }
 

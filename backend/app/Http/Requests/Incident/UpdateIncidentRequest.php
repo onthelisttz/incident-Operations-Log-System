@@ -23,7 +23,7 @@ class UpdateIncidentRequest extends FormRequest
             'description' => ['sometimes', 'string'],
             'severity' => ['sometimes', 'string', Rule::in(IncidentSeverity::values())],
             'priority' => ['sometimes', 'string', Rule::in(IncidentPriority::values())],
-            'category' => ['sometimes', 'string', Rule::in(array_keys(Incident::getCategories()))],
+            'category' => ['sometimes', 'string'],
             'impact_description' => ['nullable', 'string'],
             'affected_systems' => ['nullable', 'array'],
             'affected_systems.*' => ['string'],

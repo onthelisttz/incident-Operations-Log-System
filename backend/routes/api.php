@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\AttachmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\IncidentController;
-use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PublicController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -123,14 +122,5 @@ Route::middleware(['auth:sanctum', 'active', 'first_login', 'throttle:authentica
         Route::get('/escalation-alerts', [DashboardController::class, 'escalationAlerts']);
     });
 
-    // ===========================================
-    // NOTIFICATIONS
-    // ===========================================
-    Route::prefix('notifications')->group(function () {
-        Route::get('/', [NotificationController::class, 'index']);
-        Route::get('/unread', [NotificationController::class, 'unread']);
-        Route::get('/unread-count', [NotificationController::class, 'unreadCount']);
-        Route::patch('/{notification}/read', [NotificationController::class, 'markAsRead']);
-        Route::patch('/read-all', [NotificationController::class, 'markAllAsRead']);
-    });
+
 });

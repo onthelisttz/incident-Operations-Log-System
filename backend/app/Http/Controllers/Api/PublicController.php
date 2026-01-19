@@ -28,8 +28,7 @@ class PublicController extends Controller
                 'description' => 'Incident & Operations Log System',
                 'version' => '1.0.0',
                 'features' => [
-                    'Incident Management',
-                    'Real-time Notifications',
+                    'Incident Management',                   
                     'Role-based Access Control',
                     'Analytics Dashboard',
                     'CSV Export',

@@ -1,77 +1,95 @@
-# Incident & Operations Log System (IOLS) - Backend
+# IOLS - Backend
 
-## Overview
+The backend API for the Incident & Operations Log System, built with **Laravel 10**, **PHP 8.2**, and **MySQL**.
 
-IOLS is a robust incident management system designed to track, manage, and resolve operational incidents efficiently. This repository contains the backend API built with Laravel 12.
+## Prerequisites
 
-## Key Features
+- **PHP**: v8.2 or higher
+- **Composer**
+- **MySQL**: v8.0 or higher
 
-- **Authentication**: Secure token-based auth using Laravel Sanctum.
-- **Role-Based Access Control (RBAC)**: Admin, Operator, and Reporter roles with granular permissions.
-- **Incident Management**: complete lifecycle management (Open -> Investigating -> Resolved -> Closed).
-- **Dashboard & Analytics**: Real-time statistics, MTTR tracking, and operator performance metrics.
-- **Audit Logging**: Comprehensive activity logs for all incident changes.
-- **Notifications**: In-app notifications for status changes and assignments.
+## Installation
 
-## Tech Stack
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
 
-- **Framework**: Laravel 12
-- **Database**: MySQL
-- **API Documentation**: Scribe
-- **Testing**: PHPUnit
+2.  **Install dependencies:**
+    ```bash
+    composer install
+    ```
 
-## Getting Started
+3.  **Environment Configuration:**
+    *Skip this if `.env` is already present.*
+    ```bash
+    cp .env.example .env
+    ```
+    *Open `.env` and update the database configuration:*
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=iols
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
 
-### Prerequisites
+4.  **Generate Application Key:**
+    *Skip this if `.env` already has an APP_KEY.*
+    ```bash
+    php artisan key:generate
+    ```
 
-- PHP 8.2+
-- Composer
-- MySQL
+5.  **Database Setup (Migrations & Seeding):**
+    Run the migrations and seed the database with initial data (System Admin, roles, etc.).
+    **First-time Setup (Create Database):**
+    If the database does not exist yet, run this command and type `yes` when asked to create it:
+    ```bash
+    php artisan migrate
+    ```
 
-### Installation
+    **Populate Database (Seed Users):**
+    Once the database exists, run this command to set up the clean schema and create default users:
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+    > **⚠️ IMPORTANT:** You **MUST** run the `--seed` flag during the initial setup. Running only `php artisan migrate` will create the tables but **will not create any user accounts**, making it impossible to log in.
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd backend
-   ```
+    **Default Accounts Created by Seeder:**
+    - **Admin**: `admin@iols.local` / `password`
+    - **Operator**: `john.operator@iols.local` / `password`
+    - **Reporter**: `alice.reporter@iols.local` / `password`
 
-2. **Install dependencies**
-   ```bash
-   composer install
-   ```
+## Running the Application
 
-3. **Environment Setup**
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
-   Configure your database settings in `.env`.
-
-4. **Database Setup**
-   ```bash
-   php artisan migrate:fresh --seed
-   ```
-   This will create the tables and seed default users:
-   - **Admin**: `admin@iols.local` / `password`
-   - **Operator**: `john.operator@iols.local` / `password`
-   - **Reporter**: `alice.reporter@iols.local` / `password`
-
-5. **Serve the Application**
-   ```bash
-   php artisan serve
-   ```
+To start the local development server:
+```bash
+php artisan serve
+```
+The API will be available at `http://127.0.0.1:8000`.
 
 ## API Documentation
 
-The API documentation is available at `/docs` when the server is running.
-To regenerate documentation:
+The project uses **Knuckles Scribe** to generate API documentation.
+
+### Generating Documentation
+To generate or update the documentation after making changes to the API:
 ```bash
 php artisan scribe:generate
 ```
 
-## Running Tests
+### Viewing Documentation
+Once the server is running, visit:
+[http://localhost:8000/docs](http://localhost:8000/docs)
 
+## Testing
+
+To run the automated test suite:
 ```bash
 php artisan test
 ```
+
+## Useful Commands
+
+- **Clear Cache:** `php artisan optimize:clear`

@@ -55,6 +55,18 @@ class Incident extends Model
         ];
     }
 
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Incident $incident) {
+            if (empty($incident->incident_number)) {
+                $incident->incident_number = static::generateIncidentNumber();
+            }
+        });
+    }
+
     // ==================== RELATIONSHIPS ====================
 
     /**

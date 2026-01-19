@@ -142,7 +142,8 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->role === UserRole::ADMIN;
+        return $this->role === UserRole::ADMIN || 
+               ($this->role instanceof UserRole && $this->role->value === UserRole::ADMIN->value);
     }
 
     /**
@@ -150,7 +151,8 @@ class User extends Authenticatable
      */
     public function isOperator(): bool
     {
-        return $this->role === UserRole::OPERATOR;
+        return $this->role === UserRole::OPERATOR || 
+               ($this->role instanceof UserRole && $this->role->value === UserRole::OPERATOR->value);
     }
 
     /**
@@ -158,7 +160,8 @@ class User extends Authenticatable
      */
     public function isReporter(): bool
     {
-        return $this->role === UserRole::REPORTER;
+        return $this->role === UserRole::REPORTER || 
+               ($this->role instanceof UserRole && $this->role->value === UserRole::REPORTER->value);
     }
 
     /**

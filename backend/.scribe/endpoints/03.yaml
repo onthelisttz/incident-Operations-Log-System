@@ -135,7 +135,8 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          access-control-allow-origin: 'http://localhost:5173'
+          access-control-allow-credentials: 'true'
         description: null
     responseFields: []
     auth:
@@ -316,7 +317,8 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          access-control-allow-origin: 'http://localhost:5173'
+          access-control-allow-credentials: 'true'
         description: null
     responseFields: []
     auth:
@@ -362,7 +364,8 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          access-control-allow-origin: 'http://localhost:5173'
+          access-control-allow-credentials: 'true'
         description: null
     responseFields: []
     auth:
@@ -420,7 +423,8 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          access-control-allow-origin: 'http://localhost:5173'
+          access-control-allow-credentials: 'true'
         description: null
     responseFields: []
     auth:
@@ -495,7 +499,7 @@ endpoints:
         name: severity
         description: ''
         required: false
-        example: high
+        example: critical
         type: string
         enumValues:
           - low
@@ -510,7 +514,7 @@ endpoints:
         name: priority
         description: ''
         required: false
-        example: high
+        example: normal
         type: string
         enumValues:
           - low
@@ -567,7 +571,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-01-18T13:13:44'
+        example: '2026-01-18T23:49:47'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -587,13 +591,13 @@ endpoints:
     cleanBodyParameters:
       title: b
       description: 'Eius et animi quos velit et.'
-      severity: high
-      priority: high
+      severity: critical
+      priority: normal
       category: hardware
       impact_description: architecto
       affected_systems:
         - architecto
-      due_date: '2026-01-18T13:13:44'
+      due_date: '2026-01-18T23:49:47'
       resolution_notes: architecto
     fileParameters: []
     responses: []
@@ -836,7 +840,8 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          access-control-allow-origin: 'http://localhost:5173'
+          access-control-allow-credentials: 'true'
         description: null
     responseFields: []
     auth:
@@ -967,7 +972,8 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          access-control-allow-origin: 'http://localhost:5173'
+          access-control-allow-credentials: 'true'
         description: null
     responseFields: []
     auth:

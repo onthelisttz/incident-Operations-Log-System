@@ -24,7 +24,7 @@ class IncidentFactory extends Factory
     public function definition(): array
     {
         return [
-            'incident_number' => Incident::generateIncidentNumber(),
+            // 'incident_number' => Incident::generateIncidentNumber(), // Handled by model boot
             'title' => fake()->sentence(6),
             'description' => fake()->paragraphs(2, true),
             'severity' => fake()->randomElement(IncidentSeverity::values()),

@@ -6,9 +6,6 @@ use App\Events\IncidentAssigned;
 use App\Events\IncidentCreated;
 use App\Events\IncidentStatusChanged;
 use App\Events\UserCreated;
-use App\Listeners\SendAssignmentNotification;
-use App\Listeners\SendIncidentCreatedNotification;
-use App\Listeners\SendStatusChangeNotification;
 use App\Listeners\SendWelcomeEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -29,13 +26,13 @@ class EventServiceProvider extends ServiceProvider
             SendWelcomeEmail::class,
         ],
         IncidentCreated::class => [
-            SendIncidentCreatedNotification::class,
+            // Listeners removed
         ],
         IncidentStatusChanged::class => [
-            SendStatusChangeNotification::class,
+            // Listeners removed
         ],
         IncidentAssigned::class => [
-            SendAssignmentNotification::class,
+            // Listeners removed
         ],
     ];
 
