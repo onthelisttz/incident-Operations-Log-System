@@ -50,5 +50,10 @@ export type Incident = {
     name?: string
     file_path?: string
     url?: string
+    created_at?: string
+    uploaded_by?: { id: number; name: string }
+    uploader?: { id: number; name: string }
+    user?: { id: number; name: string }
+    file_size_human?: string
   }[]
 }

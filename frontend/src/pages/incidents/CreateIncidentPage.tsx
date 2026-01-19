@@ -8,6 +8,8 @@ import Button from '../../components/common/Button'
 import * as incidentsApi from '../../api/incidents.api'
 import toast from 'react-hot-toast'
 import { usePageTitle } from '../../hooks/usePageTitle'
+import Alert from '../../components/common/Alert'
+import axios from 'axios'
 
 const CreateIncidentPage = () => {
   usePageTitle('Create incident')
@@ -22,6 +24,7 @@ const CreateIncidentPage = () => {
   })
   const [dueDate, setDueDate] = useState<Date | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
   const [attachments, setAttachments] = useState<File[]>([])
 
   const handleAttachmentDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -39,11 +42,18 @@ const CreateIncidentPage = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
+    setError('')
     setIsSubmitting(true)
     try {
       const response = await incidentsApi.createIncident({
         ...form,
-        due_date: dueDate ? dueDate.toISOString().slice(0, 10) : null,
+        due_date: dueDate
+          ? [
+              dueDate.getFullYear(),
+              String(dueDate.getMonth() + 1).padStart(2, '0'),
+              String(dueDate.getDate()).padStart(2, '0'),
+            ].join('-')
+          : null,
       })
       const incidentId = response.data.data.id
       if (attachments.length) {
@@ -53,8 +63,13 @@ const CreateIncidentPage = () => {
       }
       toast.success('Incident created successfully.')
       navigate('/app/incidents')
-    } catch {
-      toast.error('Failed to create incident.')
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const message = err.response?.data?.message
+        setError(message ?? 'Failed to create incident.')
+      } else {
+        setError('Failed to create incident.')
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -73,6 +88,7 @@ const CreateIncidentPage = () => {
       </div>
       <Card>
         <form className="grid gap-6" onSubmit={handleSubmit}>
+          {error ? <Alert title={error} tone="error" /> : null}
           <Input
             label="Title"
             value={form.title}
@@ -131,6 +147,7 @@ const CreateIncidentPage = () => {
               selected={dueDate}
               onChange={setDueDate}
               placeholder="YYYY-MM-DD"
+              minDate={new Date()}
             />
           </div>
           <label className="block text-sm font-medium text-ink">

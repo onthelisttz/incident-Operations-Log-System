@@ -23,9 +23,6 @@ const Header = () => {
             <a className="relative hover:text-primary-600 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-primary-600 after:transition-all after:duration-200 hover:after:w-full" href="#features">
               Features
             </a>
-            <a className="relative hover:text-primary-600 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-primary-600 after:transition-all after:duration-200 hover:after:w-full" href="#why-us">
-              Why choose us
-            </a>
             <a className="relative hover:text-primary-600 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-primary-600 after:transition-all after:duration-200 hover:after:w-full" href="#workflow">
               Workflow
             </a>
@@ -95,9 +92,6 @@ const Header = () => {
             </button>
           </div>
           <div className="flex flex-col gap-3 text-sm font-medium text-ink-muted">
-            <a className="relative inline-flex w-fit hover:text-primary-600 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-primary-600 after:transition-all after:duration-200 hover:after:w-full" href="#why-us" onClick={() => setOpen(false)}>
-              Why choose us
-            </a>
             <a className="relative inline-flex w-fit hover:text-primary-600 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-primary-600 after:transition-all after:duration-200 hover:after:w-full" href="#workflow" onClick={() => setOpen(false)}>
               Workflow
             </a>

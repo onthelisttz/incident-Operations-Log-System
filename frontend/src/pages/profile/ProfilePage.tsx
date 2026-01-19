@@ -31,11 +31,6 @@ const ProfilePage = () => {
     email: user?.email ?? '',
     phone: user?.phone ?? '',
   })
-  const [notifications, setNotifications] = useState({
-    incidentUpdates: true,
-    statusChanges: true,
-    weeklySummary: false,
-  })
   const phoneValid = isValidPhoneNumber(form.phone)
   const initialForm = useMemo(
     () => ({
@@ -135,12 +130,12 @@ const ProfilePage = () => {
       </div>
       <Card title="Profile information" subtitle="Keep your details up to date.">
 
-      <div>
-        {error ? <Alert title={error} tone="error" /> : null}
-        {message ? <Alert title={message} tone="success" /> : null}
-      </div>
+        <div>
+          {error ? <Alert title={error} tone="error" /> : null}
+          {message ? <Alert title={message} tone="success" /> : null}
+        </div>
         <form className="grid gap-6 md:grid-cols-2">
-    
+
           <Input
             label="Full name"
             value={form.name}
@@ -198,40 +193,6 @@ const ProfilePage = () => {
             </Button>
           </div>
         </form>
-      </Card>
-      <Card title="Notification preferences" subtitle="Choose what updates you receive.">
-        <div className="space-y-4 text-sm text-ink-muted">
-          <label className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              checked={notifications.incidentUpdates}
-              onChange={() =>
-                setNotifications((prev) => ({ ...prev, incidentUpdates: !prev.incidentUpdates }))
-              }
-            />
-            Incident updates and comments
-          </label>
-          <label className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              checked={notifications.statusChanges}
-              onChange={() =>
-                setNotifications((prev) => ({ ...prev, statusChanges: !prev.statusChanges }))
-              }
-            />
-            Status changes and assignments
-          </label>
-          <label className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              checked={notifications.weeklySummary}
-              onChange={() =>
-                setNotifications((prev) => ({ ...prev, weeklySummary: !prev.weeklySummary }))
-              }
-            />
-            Weekly summary email
-          </label>
-        </div>
       </Card>
     </div>
   )

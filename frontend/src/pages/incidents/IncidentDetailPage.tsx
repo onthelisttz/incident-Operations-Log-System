@@ -12,7 +12,7 @@ import type { Incident } from '../../types/incident.types'
 import { usePageTitle } from '../../hooks/usePageTitle'
 import { useAuth } from '../../hooks/useAuth'
 import * as usersApi from '../../api/users.api'
-import { getFileUrl } from '../../utils/urls'
+import { sanctumBaseUrl, storageBaseUrl } from '../../utils/appConfig'
 
 const statusClassMap: Record<string, string> = {
   open: 'bg-status-open-bg text-status-open-text',
@@ -104,10 +104,11 @@ const IncidentDetailPage = () => {
   const [updates, setUpdates] = useState<
     {
       id: number
-      action_type: string
+      action_type: { value: string; label: string; icon?: string } | string
       previous_value?: string | null
       new_value?: string | null
       comment?: string | null
+      description?: string | null
       is_internal?: boolean
       created_at?: string
       user?: { id: number; name: string }
@@ -262,8 +263,21 @@ const IncidentDetailPage = () => {
   }
 
   const visibleUpdates = useMemo(() => {
-    if (user?.role === 'admin' || user?.role === 'operator') return updates
-    return updates.filter((update) => !update.is_internal)
+    const filtered =
+      user?.role === 'admin' || user?.role === 'operator'
+        ? updates
+        : updates.filter((update) => !update.is_internal)
+    const getTime = (value?: string | null) => {
+      if (!value) return 0
+      const parsed = Date.parse(value)
+      return Number.isNaN(parsed) ? 0 : parsed
+    }
+    return [...filtered].sort((a, b) => {
+      const aTime = getTime(a.created_at)
+      const bTime = getTime(b.created_at)
+      if (bTime !== aTime) return bTime - aTime
+      return (b.id ?? 0) - (a.id ?? 0)
+    })
   }, [updates, user?.role])
 
   const formatValue = (value?: unknown) => {
@@ -323,6 +337,26 @@ const IncidentDetailPage = () => {
     } catch {
       toast.error('Unable to download attachment.')
     }
+  }
+
+  const getAttachmentViewUrl = (attachment: {
+    id: number
+    file_name?: string
+    name?: string
+    url?: string
+    file_path?: string
+  }) => {
+    if (attachment.url) {
+      if (attachment.url.startsWith('http://') || attachment.url.startsWith('https://')) {
+        return attachment.url
+      }
+      return `${sanctumBaseUrl}${attachment.url.startsWith('/') ? '' : '/'}${attachment.url}`
+    }
+    const fileName = attachment.file_name ?? attachment.name ?? attachment.file_path?.split('/').pop()
+    if (fileName) {
+      return `${storageBaseUrl}/${fileName}`
+    }
+    return `${sanctumBaseUrl}/attachments/${attachment.id}/download`
   }
 
   if (isLoading) {
@@ -557,12 +591,15 @@ const IncidentDetailPage = () => {
               <div key={update.id} className="rounded-2xl border border-line bg-surface p-4 text-sm">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="font-semibold text-ink">
-                    {formatValue(update.action_type) ? formatValue(update.action_type).replace(/_/g, ' ') : 'update'}
+                    {formatValue(update.action_type) ? formatValue(update.action_type) : 'Update'}
                   </div>
                   <div className="text-xs text-ink-muted">
                     {update.created_at ? new Date(update.created_at).toLocaleString() : '-'}
                   </div>
                 </div>
+                {update.description ? (
+                  <p className="mt-2 text-xs text-ink-subtle">{update.description}</p>
+                ) : null}
                 {update.comment ? (
                   <p className="mt-2 text-ink-muted">{formatValue(update.comment)}</p>
                 ) : null}
@@ -591,14 +628,25 @@ const IncidentDetailPage = () => {
           <div className="space-y-2">
             {attachments.map((attachment) => (
               <div key={attachment.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line bg-surface p-3 text-sm">
-                <div className="text-ink">
-                  {attachment.file_name ?? attachment.name ?? `Attachment ${attachment.id}`}
+                <div>
+                  <div className="text-ink font-semibold">
+                    {attachment.file_name ?? attachment.name ?? `Attachment ${attachment.id}`}
+                  </div>
+                  <div className="mt-1 text-xs text-ink-subtle">
+                    {attachment.uploader?.name ??
+                      attachment.uploaded_by?.name ??
+                      attachment.user?.name ??
+                      'Unknown'}
+                    {' · '}
+                    {attachment.created_at ? new Date(attachment.created_at).toLocaleString() : '-'}
+                    {attachment.file_size_human ? ` · ${attachment.file_size_human}` : ''}
+                  </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {attachment.file_path || attachment.url ? (
+                  {getAttachmentViewUrl(attachment) ? (
                     <a
                       className="inline-flex items-center rounded-full border border-line px-3 py-1 text-xs font-semibold text-ink-muted hover:text-primary-600"
-                      href={attachment.url ?? getFileUrl(attachment.file_path) ?? '#'}
+                      href={getAttachmentViewUrl(attachment)}
                       target="_blank"
                       rel="noreferrer"
                     >

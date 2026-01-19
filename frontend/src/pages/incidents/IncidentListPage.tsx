@@ -40,6 +40,13 @@ const priorityClassMap: Record<string, string> = {
 
 const statusSteps = ['open', 'investigating', 'resolved', 'closed'] as const
 
+const formatLocalDate = (value: Date) =>
+  [
+    value.getFullYear(),
+    String(value.getMonth() + 1).padStart(2, '0'),
+    String(value.getDate()).padStart(2, '0'),
+  ].join('-')
+
 const getNextStatuses = (current: string) => {
   switch (current) {
     case 'open':
@@ -317,7 +324,7 @@ const IncidentListPage = () => {
                   onChange={(date) =>
                     setFilters({
                       ...filters,
-                      from_date: date ? date.toISOString().slice(0, 10) : '',
+                    from_date: date ? formatLocalDate(date) : '',
                     })
                   }
                   open={fromOpen}
@@ -325,6 +332,7 @@ const IncidentListPage = () => {
                   onClickOutside={() => setFromOpen(false)}
                   onSelect={() => setFromOpen(false)}
                   closeOnSelect
+                  maxDate={new Date()}
                   dateFormat="yyyy-MM-dd"
                   placeholderText="YYYY-MM-DD"
                 wrapperClassName="w-full"
@@ -356,7 +364,7 @@ const IncidentListPage = () => {
                   onChange={(date) =>
                     setFilters({
                       ...filters,
-                      to_date: date ? date.toISOString().slice(0, 10) : '',
+                    to_date: date ? formatLocalDate(date) : '',
                     })
                   }
                   open={toOpen}
@@ -364,6 +372,7 @@ const IncidentListPage = () => {
                   onClickOutside={() => setToOpen(false)}
                   onSelect={() => setToOpen(false)}
                   closeOnSelect
+                  maxDate={new Date()}
                   dateFormat="yyyy-MM-dd"
                   placeholderText="YYYY-MM-DD"
                 wrapperClassName="w-full"

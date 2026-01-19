@@ -1,6 +1,8 @@
 import Container from './Container'
+import { useAuth } from '../../hooks/useAuth'
 
 const Hero = () => {
+  const { isAuthenticated } = useAuth()
   return (
     <section className="py-16 sm:py-20">
       <Container className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -17,12 +19,14 @@ const Hero = () => {
             can keep operations running smoothly.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              className="inline-flex items-center rounded-full bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-primary-700"
-              href="/login"
-            >
-              Login to System
-            </a>
+            {!isAuthenticated ? (
+              <a
+                className="inline-flex items-center rounded-full bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-primary-700"
+                href="/login"
+              >
+                Login to System
+              </a>
+            ) : null}
             <a
               className="inline-flex items-center rounded-full bg-primary-50 px-6 py-3 text-sm font-semibold text-primary-600 transition hover:bg-primary-100"
               href="#features"
@@ -75,14 +79,7 @@ const Hero = () => {
                     Critical, High, Medium, Low
                   </p>
                 </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-subtle">
-                    Notifications
-                  </p>
-                  <p className="mt-1 font-semibold text-ink">
-                    Email alerts for key events
-                  </p>
-                </div>
+
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-subtle">
                     Attachments

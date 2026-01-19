@@ -14,7 +14,7 @@ interface StatusChartProps {
 const StatusChart = ({ data, isLoading }: StatusChartProps) => {
     if (!isLoading && data.length === 0) {
         return (
-            <Card title="Status Distribution" subtitle="Snapshot by current status">
+            <Card title="Status Distribution" subtitle="Incidents by current status">
                 <div className="flex h-64 items-center justify-center">
                     <p className="text-ink-muted">No data available</p>
                 </div>
@@ -23,7 +23,7 @@ const StatusChart = ({ data, isLoading }: StatusChartProps) => {
     }
 
     return (
-        <Card title="Status Distribution" subtitle="Snapshot by current status">
+        <Card title="Status Distribution" subtitle="Incidents by current status">
             <div className="h-64 w-full">
                 {isLoading ? (
                     <div className="animate-pulse bg-surface-muted h-full w-full rounded-xl" />

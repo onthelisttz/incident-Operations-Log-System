@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# IOLS - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend application for the Incident & Operations Log System, built with **React**, **TypeScript**, and **Tailwind CSS**.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Node.js**: v18.0.0 or higher
+- **npm**: v16.0.0 or higher
 
-## React Compiler
+## Installation
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd frontend
+    ```
 
-## Expanding the ESLint configuration
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3.  **Environment Configuration:**
+    *Skip this if `.env` is already present.*
+    ```bash
+    cp .env.example .env
+    ```
+    *Note: If `.env.example` does not exist, create a `.env` file with the following content:*
+    ```env
+    VITE_API_BASE_URL=http://localhost:8000/api
+    ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Running the Application
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Development Server
+To start the development server with Hot Module Replacement (HMR):
+```bash
+npm run dev
+```
+The application will be available at `http://localhost:5173`.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Production Build
+To build the application for production:
+```bash
+npm run build
+```
+The build artifacts will be stored in the `dist/` directory.
+
+### Linting
+To run the linter:
+```bash
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- `src/api`: API client and endpoint definitions.
+- `src/components`: Reusable UI components.
+- `src/contexts`: React Context providers (Auth, Theme, etc.).
+- `src/hooks`: Custom React hooks.
+- `src/pages`: Page components corresponding to routes.
+- `src/routes`: Routing configuration.
+- `src/types`: TypeScript type definitions.
+- `src/utils`: Helper functions and utilities.

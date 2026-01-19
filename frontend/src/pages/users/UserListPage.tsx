@@ -92,6 +92,7 @@ const UserListPage = () => {
         prev.map((item) => (item.id === user.id ? { ...item, ...response.data.data } : item)),
       )
       toast.success(user.is_active ? 'User blocked.' : 'User unblocked.')
+      setStatusTarget(null)
     } catch {
       toast.error('Unable to update user status.')
     } finally {

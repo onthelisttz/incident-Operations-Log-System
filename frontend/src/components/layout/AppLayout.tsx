@@ -1,8 +1,17 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import Header from './Header'
 import { ChangePasswordProvider } from '../../contexts/ChangePasswordContext'
 
 const AppLayout = () => {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.pathname !== '/unauthorized') {
+      sessionStorage.setItem('last_route', location.pathname)
+    }
+  }, [location.pathname])
+
   return (
     <ChangePasswordProvider>
       <div className="flex min-h-screen flex-col bg-surface text-ink">

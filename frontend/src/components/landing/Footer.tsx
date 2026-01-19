@@ -19,9 +19,6 @@ const Footer = () => {
             <a className="hover:text-primary-600" href="#features">
               Features
             </a>
-            <a className="hover:text-primary-600" href="#why-us">
-              Why choose us
-            </a>
             <a className="hover:text-primary-600" href="#workflow">
               Workflow
             </a>

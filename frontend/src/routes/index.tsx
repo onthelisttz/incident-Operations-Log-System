@@ -16,6 +16,7 @@ import CreateIncidentPage from '../pages/incidents/CreateIncidentPage'
 import UserListPage from '../pages/users/UserListPage'
 import ProfilePage from '../pages/profile/ProfilePage'
 import NotFoundPage from '../pages/NotFoundPage'
+import UnauthorizedPage from '../pages/error/UnauthorizedPage'
 
 const AppRoutes = () => {
   return (
@@ -50,6 +51,7 @@ const AppRoutes = () => {
           </Route>
         </Route>
 
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

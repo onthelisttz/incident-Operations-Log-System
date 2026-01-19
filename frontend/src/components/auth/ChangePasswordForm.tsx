@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import PasswordInput from '../common/PasswordInput'
 import PasswordStrength from '../common/PasswordStrength'
 import { getPasswordStrength } from '../../utils/password'
+import axios from 'axios'
 
 type ChangePasswordFormProps = {
   onSuccess?: () => void
@@ -43,8 +44,13 @@ const ChangePasswordForm = ({ onSuccess }: ChangePasswordFormProps) => {
       setMessage('Password updated successfully.')
       toast.success('Password changed.')
       onSuccess?.()
-    } catch {
-      setError('Unable to change password. Please try again.')
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const apiMessage = err.response?.data?.message
+        setError(apiMessage ?? 'Unable to change password. Please try again.')
+      } else {
+        setError('Unable to change password. Please try again.')
+      }
     } finally {
       setIsSubmitting(false)
     }
